@@ -386,7 +386,7 @@ export default function App() {
 
 
             <span className="float-tag tag-two">
-              AI / ML
+              JAVA DEVELOPER 
             </span>
 
 
