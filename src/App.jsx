@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import { motion } from "framer-motion";
 
@@ -127,6 +127,32 @@ const journey = [
   ]
 ];
 
+const certificates = [
+  {
+    title: "Certification 1",
+    subtitle: "Verified achievement",
+    image: "/certificate-3.jpeg"
+  },
+  {
+    title: "Certification 2",
+    subtitle: "Technical credential",
+    image: "/certificate-4.jpeg"
+  }
+];
+
+const experiences = [
+  {
+    title: "Internship Certificate 1",
+    subtitle: "Professional internship credential",
+    image: "/intership-1.jpeg"
+  },
+  {
+    title: "Internship Certificate 2",
+    subtitle: "Professional internship credential",
+    image: "/intership-2.png"
+  }
+];
+
 
 // ========================================
 // APP
@@ -135,6 +161,26 @@ const journey = [
 export default function App() {
 
   const [open, setOpen] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
+  const [playedOnce, setPlayedOnce] = useState(false);
+  const videoRef = useRef(null);
+
+  const handlePlayVideo = () => {
+    if (playedOnce || !videoRef.current) {
+      return;
+    }
+
+    setPlayedOnce(true);
+    setVideoEnded(false);
+    setVideoPlaying(true);
+    videoRef.current.play();
+  };
+
+  const handleVideoEnd = () => {
+    setVideoPlaying(false);
+    setVideoEnded(true);
+  };
 
 
   // ========================================
@@ -212,6 +258,15 @@ export default function App() {
               </button>
 
             ))}
+
+            <a
+              className="resume-nav"
+              href="https://docs.google.com/document/d/1nbClSbTabJOzif225XNHB3kLU0CY6Oe5/edit?pli=1"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Resume
+            </a>
 
           </div>
 
@@ -371,11 +426,30 @@ export default function App() {
 
             <div className="portrait-ring">
 
+              <video
+                ref={videoRef}
+                className={`portrait-video ${videoEnded ? "hidden" : ""}`}
+                src="/portfolio.mp4"
+                poster="/profile.png"
+                onEnded={handleVideoEnd}
+                playsInline
+                preload="metadata"
+              />
+
               <img
                 src="/profile.png"
                 alt="Hema Latha C"
-                className="profile-photo"
+                className={`profile-photo ${videoEnded ? "" : "hidden"}`}
               />
+
+              {!playedOnce && (
+                <button
+                  className="portrait-play-button"
+                  onClick={handlePlayVideo}
+                >
+                  Play video
+                </button>
+              )}
 
             </div>
 
@@ -843,65 +917,118 @@ export default function App() {
 
           {/* CERTIFICATES */}
 
-          <div className="certs">
+          <div className="cert-section">
 
+            <div className="cert-block">
 
-            <div className="cert">
+              <div className="section-subhead">
 
-              <span>✦</span>
+                <span>✦</span>
 
-              <div>
+                <div>
 
-                <b>
-                  Certification
-                </b>
+                  <b>
+                    Certificates
+                  </b>
 
-                <small>
-                  Add your certificate here
-                </small>
+                  <small>
+                    Proof of courses and technical achievements.
+                  </small>
+
+                </div>
+
+              </div>
+
+              <div className="certs-grid">
+
+                {certificates.map((item) => (
+
+                  <article
+                    className="cert-card"
+                    key={item.image}
+                  >
+
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      loading="lazy"
+                    />
+
+                    <div className="cert-card-info">
+
+                      <b>
+                        {item.title}
+                      </b>
+
+                      <small>
+                        {item.subtitle}
+                      </small>
+
+                    </div>
+
+                  </article>
+
+                ))}
 
               </div>
 
             </div>
 
 
-            <div className="cert">
+            <div className="cert-block">
 
-              <span>✦</span>
+              <div className="section-subhead">
 
-              <div>
+                <span>✦</span>
 
-                <b>
-                  Hackathon / Award
-                </b>
+                <div>
 
-                <small>
-                  Add your achievement here
-                </small>
+                  <b>
+                    Internship Certificates
+                  </b>
+
+                  <small>
+                    Experience certificates from practical internships.
+                  </small>
+
+                </div>
+
+              </div>
+
+              <div className="certs-grid">
+
+                {experiences.map((item) => (
+
+                  <article
+                    className="cert-card"
+                    key={item.image}
+                  >
+
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      loading="lazy"
+                    />
+
+                    <div className="cert-card-info">
+
+                      <b>
+                        {item.title}
+                      </b>
+
+                      <small>
+                        {item.subtitle}
+                      </small>
+
+                    </div>
+
+                  </article>
+
+                ))}
 
               </div>
 
             </div>
-
-
-            <div className="cert">
-
-              <span>✦</span>
-
-              <div>
-
-                <b>
-                  Course / Workshop
-                </b>
-
-                <small>
-                  Add your credential here
-                </small>
-
-              </div>
-
-            </div>
-
 
           </div>
 
@@ -960,7 +1087,6 @@ export default function App() {
               <Send size={17} />
 
             </a>
-
 
             <div className="socials">
 
